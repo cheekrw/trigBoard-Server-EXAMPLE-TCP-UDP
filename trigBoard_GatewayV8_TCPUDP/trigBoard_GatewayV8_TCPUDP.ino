@@ -40,6 +40,9 @@ void setup() {
   
   tft.begin();
   tft.setRotation(3);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setFont(&FreeSansBold24pt7b);
+  tft.setTextSize(2);
 
   //TCP SETUP AND CALL BACKS ******************
   server.on("/trigBoard", HTTP_GET, [] (AsyncWebServerRequest * request) {
@@ -73,11 +76,12 @@ void setup() {
       //      Serial.print(", Data: ");
       //Serial.print("UDP: ");
       Serial.write(packet.data(), packet.length());
+      String T = (char*)(packet.data());
       Serial.println("");
       tft.fillScreen(ILI9341_BLACK);
       tft.setTextColor(ILI9341_WHITE);
       tft.setCursor(25,100);
-      tft.println(packet.data());
+      tft.println(T);
 
   
       //and could send back as well
@@ -101,9 +105,7 @@ void loop() {
   unsigned long testText(String T) {
   tft.fillScreen(ILI9341_BLACK);
   tft.setCursor(25,100);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setFont(&FreeSansBold24pt7b);
-  tft.setTextSize(2);
+
   tft.println(T);
 //  tft.setFont();
 //  tft.println(batt);
