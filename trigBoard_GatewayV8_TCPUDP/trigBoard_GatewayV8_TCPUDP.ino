@@ -41,13 +41,10 @@ void setup() {
   tft.begin();
   tft.setRotation(3);
   tft.setTextColor(ILI9341_WHITE);
-  tft.setFont(&FreeSansBold24pt7b);
-  tft.setTextSize(2);
 
   //TCP SETUP AND CALL BACKS ******************
   server.on("/trigBoard", HTTP_GET, [] (AsyncWebServerRequest * request) {
     String message;
-    String T;
     char newPacket[100];
     if (request->hasParam("message")) {// we send data in URL /trigBoard?message=blah blah
       message = request->getParam("message")->value();
@@ -76,13 +73,17 @@ void setup() {
       //      Serial.print(", Data: ");
       //Serial.print("UDP: ");
       Serial.write(packet.data(), packet.length());
-      String T = (char*)(packet.data());
       Serial.println("");
+      String T_data = (char*)(packet.data());
+      int comma_location = T_data.indexOf(',');
       tft.fillScreen(ILI9341_BLACK);
-      tft.setTextColor(ILI9341_WHITE);
-      tft.setCursor(25,100);
-      tft.println(T);
-
+      tft.setCursor(90,220);
+      tft.setFont(&FreeSansBold24pt7b);
+      tft.setTextSize(2);
+      tft.print(T_data.substring(0, comma_location));
+      tft.setFont();
+      tft.setCursor(0,0);
+      tft.print(T_data.substring(comma_location + 1));
   
       //and could send back as well
       WiFiUDP udpTX;
